@@ -1,0 +1,20 @@
+[
+  {
+    "event_id": "evt-001",
+    "event_type": "seal.recorded",
+    "aggregate_id": "seal-001",
+    "occurred_at": "2026-09-21T08:00:00+08:00"
+  },
+  {
+    "event_id": "evt-002",
+    "event_type": "sample.collected",
+    "aggregate_id": "sample-001",
+    "occurred_at": "2026-09-22T09:00:00+08:00"
+  },
+  {
+    "event_id": "evt-003",
+    "event_type": "inspection.submitted",
+    "aggregate_id": "inspect-001",
+    "occurred_at": "2026-09-23T10:00:00+08:00"
+  }
+]

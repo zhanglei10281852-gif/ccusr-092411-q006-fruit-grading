@@ -1,0 +1,31 @@
+{
+  "project": "进口水果分级追溯",
+  "entities": [
+    "import_lot",
+    "seal",
+    "sample",
+    "inspection",
+    "release_decision"
+  ],
+  "states": [
+    "packed",
+    "sealed",
+    "arrived",
+    "sampling",
+    "reviewed",
+    "released",
+    "conditional",
+    "recalled"
+  ],
+  "event_types": [
+    "seal.recorded",
+    "sample.collected",
+    "inspection.submitted",
+    "decision.issued",
+    "decision.revised"
+  ],
+  "time_policy": "ISO 8601 with timezone",
+  "identifier_policy": "业务标识在同一类型内唯一",
+  "version_policy": "发布后的规则以新版本追加"
+}
+

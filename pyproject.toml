@@ -1,0 +1,10 @@
+[project]
+name = "ccusr-fruit-grading"
+version = "0.1.0"
+description = "进口批次、封识、样本、检验与放行裁决的领域资料"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.unittest]
+start-directory = "tests"
+
