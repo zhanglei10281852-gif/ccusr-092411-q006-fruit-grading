@@ -2,30 +2,72 @@
   "project": "进口水果分级追溯",
   "entities": [
     "import_lot",
+    "box",
     "seal",
+    "handover",
+    "sampling_rule",
     "sample",
     "inspection",
-    "release_decision"
+    "release_decision",
+    "customer_order",
+    "notice"
   ],
   "states": [
+    "registered",
     "packed",
     "sealed",
     "arrived",
-    "sampling",
+    "sampled",
     "reviewed",
+    "blocked",
     "released",
     "conditional",
+    "rejected",
     "recalled"
   ],
   "event_types": [
+    "lot.registered",
+    "box.packed",
     "seal.recorded",
+    "seal.broken",
+    "handover.recorded",
+    "rule.published",
     "sample.collected",
     "inspection.submitted",
     "decision.issued",
-    "decision.revised"
+    "decision.recalled",
+    "order.registered",
+    "order.notified",
+    "order.delivered"
   ],
+  "stages": [
+    "pack",
+    "seal",
+    "handover",
+    "market_sample",
+    "market_inspection",
+    "customer_sample",
+    "customer_inspection",
+    "release"
+  ],
+  "stage_roles": {
+    "pack": "origin_packer",
+    "seal": "carrier_sealer",
+    "handover": "port_receiver",
+    "market_sample": "market_inspector",
+    "market_inspection": "market_inspector",
+    "customer_sample": "customer_inspector",
+    "customer_inspection": "customer_inspector",
+    "release": "quality_manager"
+  },
+  "inspection_kinds": ["initial", "reinspection", "backfill-market", "backfill-customer"],
+  "verdicts": ["qualified", "conditional", "rejected"],
+  "release_types": ["full", "conditional", "rejected"],
+  "notice_kinds": ["release", "overturn", "recall"],
   "time_policy": "ISO 8601 with timezone",
-  "identifier_policy": "业务标识在同一类型内唯一",
-  "version_policy": "发布后的规则以新版本追加"
+  "identifier_policy": "业务标识在同一类型内唯一；事件 event_id 全局唯一且幂等",
+  "version_policy": "发布后的规则以新版本追加；检验以轮次形成新版本，历史事件只追加不修改",
+  "chain_policy": "登记→装箱→封识→交接→抽样→检验→裁决必须连续；封识不符或证据缺口直接阻断放行",
+  "backfill_policy": "补录保留 occurred_at 业务时间并记录 recorded_at；当时结论逐字保留",
+  "recall_policy": "有条件放行期满或后续检验不合格可召回；召回与改判只通知未交付订单"
 }
-

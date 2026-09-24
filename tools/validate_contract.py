@@ -16,12 +16,24 @@ def load_json(relative_path: str):
 def validate() -> tuple[int, int]:
     contract = load_json("domain/contract.json")
     events = load_json("examples/events.json")
-    required = {"project", "entities", "states", "event_types", "time_policy"}
+    required = {
+        "project", "entities", "states", "event_types", "stages",
+        "stage_roles", "time_policy", "version_policy", "chain_policy",
+    }
     missing = sorted(required - set(contract))
     if missing:
         raise ValueError("领域合同缺少字段：" + "、".join(missing))
     if contract["time_policy"] != "ISO 8601 with timezone":
         raise ValueError("time_policy 必须明确包含时区")
+
+    # 每个环节必须指定唯一签署角色，角色取值合法
+    valid_roles = set(contract["stage_roles"].values())
+    if not valid_roles:
+        raise ValueError("stage_roles 不能为空")
+    for stage in contract["stages"]:
+        if stage not in contract["stage_roles"]:
+            raise ValueError(f"环节 {stage} 缺少绑定角色")
+
     allowed = set(contract["event_types"])
     connection = sqlite3.connect(":memory:")
     connection.execute(
@@ -29,9 +41,13 @@ def validate() -> tuple[int, int]:
         "aggregate_id text not null, occurred_at text not null)"
     )
     previous = None
+    seen_ids: set[str] = set()
     for event in events:
         if event["event_type"] not in allowed:
             raise ValueError(f"未知事件类型：{event['event_type']}")
+        if event["event_id"] in seen_ids:
+            raise ValueError(f"事件编号重复：{event['event_id']}")
+        seen_ids.add(event["event_id"])
         occurred_at = datetime.fromisoformat(event["occurred_at"])
         if occurred_at.tzinfo is None:
             raise ValueError("样例事件必须包含时区")
@@ -51,4 +67,3 @@ def validate() -> tuple[int, int]:
 if __name__ == "__main__":
     entity_count, event_count = validate()
     print(f"合同校验通过：{entity_count} 类实体，{event_count} 条样例事件")
-
