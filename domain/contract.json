@@ -2,12 +2,22 @@
   "project": "进口水果分级追溯",
   "entities": [
     "import_lot",
+    "container",
+    "box",
     "seal",
     "sample",
     "inspection",
-    "release_decision"
+    "grade_conclusion",
+    "sampling_rule",
+    "contract",
+    "customer_order",
+    "release_decision",
+    "release",
+    "recall",
+    "notification"
   ],
   "states": [
+    "registered",
     "packed",
     "sealed",
     "arrived",
@@ -18,14 +28,22 @@
     "recalled"
   ],
   "event_types": [
+    "lot.registered",
+    "lot.packed",
     "seal.recorded",
+    "handover.recorded",
     "sample.collected",
     "inspection.submitted",
+    "conclusion.versioned",
     "decision.issued",
-    "decision.revised"
+    "decision.revised",
+    "release.granted",
+    "release.expired",
+    "release.recalled",
+    "order.affected",
+    "customer.notified"
   ],
   "time_policy": "ISO 8601 with timezone",
   "identifier_policy": "业务标识在同一类型内唯一",
   "version_policy": "发布后的规则以新版本追加"
 }
-
